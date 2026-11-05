@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ info.nome }} - Treinamento Funcional e Aparelhos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0a0c;
+            --card-bg: #16161c;
+            --border-color: #2a2a35;
+            --accent-blue: #0066ff;
+            --accent-blue-hover: #0052cc;
+        }
+        body { background-color: var(--bg-dark); color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .navbar { background-color: #121216; border-bottom: 1px solid var(--border-color); }
+        .btn-primary { background-color: var(--accent-blue); border: none; font-weight: 600; }
+        .btn-primary:hover { background-color: var(--accent-blue-hover); }
+        .card { background-color: var(--card-bg); border: 1px solid var(--border-color); color: #fff; border-radius: 12px; }
+        .hero-section { padding: 4rem 0; text-align: center; background: linear-gradient(180deg, #121216 0%, #0a0a0c 100%); border-bottom: 1px solid var(--border-color); }
+        .hero-subtitle { color: #d1d5db !important; font-size: 1.15rem; }
+        .card-text-light { color: #e5e7eb !important; }
+        .post-card img { border-top-left-radius: 12px; border-top-right-radius: 12px; max-height: 350px; object-fit: cover; }
+        .logo-badge { width: 40px; height: 40px; background-color: var(--accent-blue); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Barra Superior -->
+    <nav class="navbar navbar-expand-lg navbar-dark px-4 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+                <div class="logo-badge me-2"><i class="fa-solid fa-dumbbell"></i></div>
+                {{ info.nome }}
+            </a>
+            <div>
+                <a href="/login" class="btn btn-outline-light btn-sm px-3"><i class="fa-solid fa-right-to-bracket me-1"></i> Área do Aluno / ADM</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Seção Principal (Hero) -->
+    <section class="hero-section">
+        <div class="container">
+            <span class="badge bg-primary mb-3 px-3 py-2 text-uppercase tracking-wider">Treinamento de Alta Performance</span>
+            <h1 class="display-4 fw-bold mb-3">Supere Seus Limites no <span class="text-primary">{{ info.nome }}</span></h1>
+            <p class="hero-subtitle mb-4 mx-auto" style="max-width: 700px;">
+                Estrutura completa com treinos funcionais e aparelhos de ponta. Horários agendados para garantir o seu rendimento máximo!
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="https://wa.me/55{{ info.telefone | replace('(', '') | replace(')', '') | replace(' ', '') | replace('-', '') }}?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20as%20aulas%20e%20agendar%20uma%20aula%20experimental%20no%20Estúdio%20Burpee." target="_blank" class="btn btn-primary btn-lg px-4">
+                    <i class="fa-brands fa-whatsapp me-2"></i> Agendar Aula Experimental
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conteúdo / Feed Social dos Alunos -->
+    <div class="container py-5">
+        <div class="row">
+            <!-- Coluna Esquerda: Informações e Localização -->
+            <div class="col-lg-4 mb-4">
+                <div class="card p-4 shadow mb-4">
+                    <h5 class="fw-bold mb-3 text-white"><i class="fa-solid fa-location-dot text-primary me-2"></i> Onde Estamos</h5>
+                    <p class="mb-2 card-text-light"><strong>Endereço:</strong><br>{{ info.endereco }}</p>
+                    <p class="mb-2 card-text-light"><strong>CEP:</strong> {{ info.cep }}</p>
+                    <p class="mb-3 card-text-light"><strong>WhatsApp:</strong> {{ info.telefone }}</p>
+                    <a href="https://wa.me/55{{ info.telefone | replace('(', '') | replace(')', '') | replace(' ', '') | replace('-', '') }}?text=Olá!%20Vim%20pelo%20site%20do%20Estúdio%20Burpee%20e%20gostaria%20de%20falar%20com%20a%20recepção." target="_blank" class="btn btn-outline-primary w-100">
+                        <i class="fa-solid fa-phone me-1"></i> Falar com a Recepção
+                    </a>
+                </div>
+
+                <div class="card p-4 shadow">
+                    <h5 class="fw-bold mb-3 text-white"><i class="fa-solid fa-clock text-primary me-2"></i> Horários</h5>
+                    <p class="mb-1 card-text-light">Segunda a Sexta: {{ info.horario_semana }}</p>
+                    <p class="mb-0 card-text-light">Sábados: {{ info.horario_sabado }}</p>
+                    <hr class="border-secondary">
+                    <small class="text-info"><i class="fa-solid fa-circle-info me-1"></i> {{ info.observacao_horario }}</small>
+                </div>
+            </div>
+
+            <!-- Coluna Direita: Feed de Treinos dos Alunos -->
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h3 class="fw-bold mb-0 text-white"><i class="fa-solid fa-fire text-primary me-2"></i> Feed da Galera no Estúdio</h3>
+                    <span class="badge bg-secondary">Em Tempo Real</span>
+                </div>
+
+                <!-- Lista de Posts do Feed -->
+                {% for post in posts %}
+                <div class="card post-card mb-4 shadow">
+                    <div class="card-header bg-transparent border-bottom border-secondary d-flex align-items-center py-3">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold" style="width: 40px; height: 40px;">
+                            {{ post.aluno[0] }}
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold text-white">{{ post.aluno }}</h6>
+                            <small class="text-light opacity-75">{{ post.data }} • Aluno(a) {{ info.nome }}</small>
+                        </div>
+                    </div>
+                    {% if post.midia_url %}
+                    <img src="{{ post.midia_url }}" alt="Treino do Aluno" class="card-img-top">
+                    {% endif %}
+                    <div class="card-body">
+                        <p class="card-text mb-3 card-text-light">{{ post.legenda }}</p>
+                        <div class="d-flex align-items-center justify-content-between text-muted small">
+                            <!-- Botão de Curtir Funcional -->
+                            <form action="/post/curtir/{{ post.id }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger text-white border-secondary">
+                                    <i class="fa-solid fa-heart text-danger me-1"></i> {{ post.curtidas }} Curtidas
+                                </button>
+                            </form>
+                            <span class="text-light"><i class="fa-solid fa-dumbbell me-1 text-primary"></i> Treino Funcional & Aparelhos</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="text-center py-4 border-top border-secondary text-light opacity-75">
+        <p class="mb-0">&copy; 2026 {{ info.nome }} — Todos os direitos reservados. Endereço: {{ info.endereco }}.</p>
+    </footer>
+
+</body>
+</html>

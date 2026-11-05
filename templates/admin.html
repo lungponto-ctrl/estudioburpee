@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - {{ info.nome }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0a0a0c; color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .navbar { background-color: #121216; border-bottom: 1px solid #2a2a35; }
+        .card { background-color: #16161c; border: 1px solid #2a2a35; color: #fff; border-radius: 10px; }
+        .btn-primary { background-color: #0066ff; border: none; font-weight: 600; }
+        .btn-primary:hover { background-color: #0052cc; }
+        .table { color: #fff; }
+        .form-control, .form-select { background-color: #0a0a0c !important; border: 1px solid #2a2a35 !important; color: #ffffff !important; }
+        .form-control::placeholder { color: #9ca3af !important; opacity: 1; }
+        .form-control:focus, .form-select:focus { background-color: #0a0a0c !important; border-color: #0066ff !important; color: #ffffff !important; box-shadow: 0 0 0 0.25rem rgba(0, 102, 255, 0.25); }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark px-4">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/"><i class="fa-solid fa-dumbbell text-primary me-2"></i> {{ info.nome }} | Painel ADM</a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="/" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-house me-1"></i> Ir para o Site</a>
+                <a href="/logout" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-right-from-bracket me-1"></i> Sair</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+
+        <!-- Cartões de Resumo com Botão para Editar Informações do Estúdio -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 shadow-sm border-start border-primary border-4">
+                    <span class="text-muted small">Total de Alunos</span>
+                    <h3 class="fw-bold mt-1 mb-0">{{ alunos | length }}</h3>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 shadow-sm border-start border-success border-4">
+                    <span class="text-muted small">Professores Registados</span>
+                    <h3 class="fw-bold mt-1 mb-0">{{ professores | length }}</h3>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 shadow-sm border-start border-info border-4 d-flex justify-content-between">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">Unidade & Horários</span>
+                        <button class="btn btn-sm btn-outline-info py-0 px-2" data-bs-toggle="modal" data-bs-target="#modalEditarInfo" title="Editar Informações do Estúdio"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </div>
+                    <h6 class="fw-bold mt-2 mb-0 text-truncate text-light" title="{{ info.endereco }}">{{ info.endereco }}</h6>
+                    <small class="text-muted">Semana: {{ info.horario_semana }}</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestão do Treino Coletivo por Dia -->
+        <div class="card p-4 mb-4 shadow">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0"><i class="fa-solid fa-calendar-days text-primary me-2"></i> Gestão do Treino Coletivo por Dia da Semana</h5>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalAdicionarTreinoDia">
+                    <i class="fa-solid fa-plus me-1"></i> Adicionar Exercício ao Dia
+                </button>
+            </div>
+            <div class="row">
+                {% for dia, exercicios in treinos_semana.items() %}
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-black p-3 border border-secondary h-100">
+                        <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-circle-chevron-right me-1"></i> {{ dia }}</h6>
+                        <ul class="list-unstyled mb-0 small">
+                            {% for ex in exercicios %}
+                            <li class="mb-1 text-light"><strong>{{ ex.exercicio }}</strong> <span class="text-muted">({{ ex.series }})</span></li>
+                            {% else %}
+                            <li class="text-muted fst-italic">Nenhum treino registado.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Secção de Alunos -->
+        <div class="card p-4 mb-4 shadow">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0"><i class="fa-solid fa-users text-primary me-2"></i> Alunos Matriculados</h5>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalNovoAluno">
+                    <i class="fa-solid fa-user-plus me-1"></i> Novo Cadastro de Aluno
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>Frequência</th>
+                            <th>Vencimento</th>
+                            <th>Utilizador / Senha</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for aluno in alunos %}
+                        <tr>
+                            <td class="fw-bold">{{ aluno.nome }}</td>
+                            <td>{{ aluno.telefone }}</td>
+                            <td><span class="badge bg-secondary">{{ aluno.frequencia }}</span></td>
+                            <td><span class="text-info">{{ aluno.vencimento_mensalidade }}</span></td>
+                            <td><code>{{ aluno.usuario }}</code> / <code>{{ aluno.senha }}</code></td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-outline-warning me-1" data-bs-toggle="modal" data-bs-target="#modalEditarAluno{{ aluno.id }}" title="Editar Cadastro e Avaliação"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <form action="/admin/aluno/excluir/{{ aluno.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Deseja realmente excluir este aluno?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir Aluno"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <!-- Modal Editar Aluno -->
+                        <div class="modal fade" id="modalEditarAluno{{ aluno.id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content bg-dark text-white border border-secondary">
+                                    <div class="modal-header border-bottom border-secondary">
+                                        <h5 class="modal-title fw-bold"><i class="fa-solid fa-user-pen text-warning me-2"></i> Editar Aluno: {{ aluno.nome }}</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="/admin/aluno/editar/{{ aluno.id }}" method="POST">
+                                        <div class="modal-body text-start">
+                                            <h6 class="text-primary fw-bold mb-3">Dados Cadastrais</h6>
+                                            <div class="mb-3">
+                                                <label class="form-label text-muted small">Nome Completo</label>
+                                                <input type="text" class="form-control" name="nome" value="{{ aluno.nome }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label text-muted small">Telefone / WhatsApp</label>
+                                                <input type="text" class="form-control" name="telefone" value="{{ aluno.telefone }}" required>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label text-muted small">Frequência</label>
+                                                    <select class="form-select" name="frequencia">
+                                                        <option value="2x por semana" {% if aluno.frequencia == '2x por semana' %}selected{% endif %}>2x por semana</option>
+                                                        <option value="3x por semana" {% if aluno.frequencia == '3x por semana' %}selected{% endif %}>3x por semana</option>
+                                                        <option value="5x por semana" {% if aluno.frequencia == '5x por semana' %}selected{% endif %}>5x por semana (Livre)</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label text-muted small">Utilizador</label>
+                                                    <input type="text" class="form-control" name="usuario" value="{{ aluno.usuario }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label text-muted small">Senha</label>
+                                                <input type="text" class="form-control" name="senha" value="{{ aluno.senha }}" required>
+                                            </div>
+
+                                            <h6 class="text-primary fw-bold mt-4 mb-3">Avaliação Física Atualizada</h6>
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label text-muted small">Peso</label>
+                                                    <input type="text" class="form-control" name="peso" value="{{ aluno.avaliacao.peso }}">
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label text-muted small">Altura</label>
+                                                    <input type="text" class="form-control" name="altura" value="{{ aluno.avaliacao.altura }}">
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label text-muted small">% Gordura</label>
+                                                    <input type="text" class="form-control" name="gordura" value="{{ aluno.avaliacao.gordura }}">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label text-muted small">Meta Principal</label>
+                                                <input type="text" class="form-control" name="meta" value="{{ aluno.avaliacao.meta }}">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-top border-secondary">
+                                            <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-warning btn-sm text-dark fw-bold"><i class="fa-solid fa-check me-1"></i> Guardar Alterações</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Secção de Professores -->
+        <div class="card p-4 shadow">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0"><i class="fa-solid fa-chalkboard-user text-primary me-2"></i> Corpo Docente (Professores)</h5>
+                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalNovoProfessor">
+                    <i class="fa-solid fa-user-tie me-1"></i> Novo Professor
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-dark table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>Especialidade</th>
+                            <th class="text-end">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prof in professores %}
+                        <tr>
+                            <td class="fw-bold">{{ prof.nome }}</td>
+                            <td>{{ prof.telefone }}</td>
+                            <td><span class="text-info">{{ prof.especialidade }}</span></td>
+                            <td class="text-end">
+                                <button class="btn btn-sm btn-outline-warning me-1" data-bs-toggle="modal" data-bs-target="#modalEditarProfessor{{ prof.id }}" title="Editar Professor"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <form action="/admin/professor/excluir/{{ prof.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Deseja realmente excluir este professor?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir Professor"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <!-- Modal Editar Professor -->
+                        <div class="modal fade" id="modalEditarProfessor{{ prof.id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content bg-dark text-white border border-secondary">
+                                    <div class="modal-header border-bottom border-secondary">
+                                        <h5 class="modal-title fw-bold"><i class="fa-solid fa-user-tie text-warning me-2"></i> Editar Professor: {{ prof.nome }}</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="/admin/professor/editar/{{ prof.id }}" method="POST">
+                                        <div class="modal-body text-start">
+                                            <div class="mb-3">
+                                                <label class="form-label text-muted small">Nome Completo</label>
+                                                <input type="text" class="form-control" name="nome" value="{{ prof.nome }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label text-muted small">Telefone / WhatsApp</label>
+                                                <input type="text" class="form-control" name="telefone" value="{{ prof.telefone }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label text-muted small">Especialidade</label>
+                                                <input type="text" class="form-control" name="especialidade" value="{{ prof.especialidade }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-top border-secondary">
+                                            <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-warning btn-sm text-dark fw-bold"><i class="fa-solid fa-check me-1"></i> Guardar Alterações</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Editar Informações e Horários do Estúdio -->
+    <div class="modal fade" id="modalEditarInfo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white border border-secondary">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-location-dot text-info me-2"></i> Editar Informações & Horários</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/admin/info/editar" method="POST">
+                    <div class="modal-body text-start">
+                        <h6 class="text-primary fw-bold mb-3">Dados Gerais</h6>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Nome do Estúdio</label>
+                            <input type="text" class="form-control" name="nome" value="{{ info.nome }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">WhatsApp / Telefone</label>
+                            <input type="text" class="form-control" name="telefone" value="{{ info.telefone }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Endereço Completo</label>
+                            <input type="text" class="form-control" name="endereco" value="{{ info.endereco }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">CEP</label>
+                            <input type="text" class="form-control" name="cep" value="{{ info.cep }}" required>
+                        </div>
+
+                        <h6 class="text-primary fw-bold mt-4 mb-3">Horários de Funcionamento</h6>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Segunda a Sexta</label>
+                            <input type="text" class="form-control" name="horario_semana" value="{{ info.horario_semana }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Sábados</label>
+                            <input type="text" class="form-control" name="horario_sabado" value="{{ info.horario_sabado }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Observação de Atendimento</label>
+                            <input type="text" class="form-control" name="observacao_horario" value="{{ info.observacao_horario }}" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-info btn-sm text-dark fw-bold"><i class="fa-solid fa-check me-1"></i> Atualizar Informações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Novo Aluno -->
+    <div class="modal fade" id="modalNovoAluno" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark text-white border border-secondary">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-user-plus text-primary me-2"></i> Registar Novo Aluno & Avaliação Física</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/admin/aluno/adicionar" method="POST">
+                    <div class="modal-body text-start">
+                        <h6 class="text-primary fw-bold mb-3"><i class="fa-solid fa-id-card me-1"></i> Dados Cadastrais</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-muted small">Nome Completo</label>
+                                <input type="text" class="form-control" name="nome" required placeholder="Ex: Maria Souza">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-muted small">Telefone / WhatsApp</label>
+                                <input type="text" class="form-control" name="telefone" required placeholder="Ex: (31) 98888-9999">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-muted small">Frequência Semanal</label>
+                                <select class="form-select" name="frequencia">
+                                    <option value="2x por semana">2x por semana</option>
+                                    <option value="3x por semana" selected>3x por semana</option>
+                                    <option value="5x por semana">5x por semana (Livre)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-muted small">Utilizador (Login)</label>
+                                <input type="text" class="form-control" name="usuario" required placeholder="Ex: maria">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-muted small">Palavra-passe</label>
+                                <input type="password" class="form-control" name="senha" required placeholder="Ex: 123456">
+                            </div>
+                        </div>
+
+                        <h6 class="text-primary fw-bold mt-4 mb-3"><i class="fa-solid fa-heart-pulse me-1"></i> Avaliação Física Inicial</h6>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-muted small">Peso</label>
+                                <input type="text" class="form-control" name="peso" placeholder="Ex: 75kg">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-muted small">Altura</label>
+                                <input type="text" class="form-control" name="altura" placeholder="Ex: 1.72m">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label text-muted small">% Gordura</label>
+                                <input type="text" class="form-control" name="gordura" placeholder="Ex: 16%">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Meta Principal</label>
+                            <input type="text" class="form-control" name="meta" placeholder="Ex: Hipertrofia e Condicionamento">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check me-1"></i> Guardar Aluno & Avaliação</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Treino ao Dia da Semana -->
+    <div class="modal fade" id="modalAdicionarTreinoDia" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white border border-secondary">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-dumbbell text-primary me-2"></i> Adicionar Exercício ao Treino do Dia</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/admin/treino/adicionar" method="POST">
+                    <div class="modal-body text-start">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Dia da Semana</label>
+                            <select class="form-select" name="dia" required>
+                                <option value="Segunda-feira">Segunda-feira</option>
+                                <option value="Terça-feira">Terça-feira</option>
+                                <option value="Quarta-feira">Quarta-feira</option>
+                                <option value="Quinta-feira">Quinta-feira</option>
+                                <option value="Sexta-feira">Sexta-feira</option>
+                                <option value="Sábado">Sábado</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Nome do Exercício</label>
+                            <input type="text" class="form-control" name="exercicio" required placeholder="Ex: Burpees / Agachamento">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Séries e Repetições</label>
+                            <input type="text" class="form-control" name="series" required placeholder="Ex: 4x15">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Descanso</label>
+                            <input type="text" class="form-control" name="descanso" placeholder="Ex: 45s">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-check me-1"></i> Adicionar ao Dia</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Novo Professor -->
+    <div class="modal fade" id="modalNovoProfessor" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white border border-secondary">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-user-tie text-success me-2"></i> Registar Novo Professor</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/admin/professor/adicionar" method="POST">
+                    <div class="modal-body text-start">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Nome Completo</label>
+                            <input type="text" class="form-control" name="nome" required placeholder="Ex: Roberto Carlos">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Telefone / WhatsApp</label>
+                            <input type="text" class="form-control" name="telefone" required placeholder="Ex: (31) 97777-8888">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Especialidade</label>
+                            <input type="text" class="form-control" name="especialidade" required placeholder="Ex: Musculação / Treino Funcional">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fa-solid fa-check me-1"></i> Guardar Professor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

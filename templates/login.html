@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - {{ info.nome }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #0a0a0c;
+            color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            background-color: #16161c;
+            border: 1px solid #2a2a35;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .btn-primary {
+            background-color: #0066ff;
+            border: none;
+            padding: 0.75rem;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background-color: #0052cc;
+        }
+        .form-control, .form-select {
+            background-color: #0a0a0c;
+            border: 1px solid #2a2a35;
+            color: #fff;
+            padding: 0.75rem;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #0a0a0c;
+            border-color: #0066ff;
+            color: #fff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 102, 255, 0.25);
+        }
+        .logo-icon {
+            font-size: 2.5rem;
+            color: #0066ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card text-center">
+        <div class="mb-4">
+            <i class="fa-solid fa-dumbbell logo-icon mb-2"></i>
+            <h3 class="fw-bold">{{ info.nome }}</h3>
+            <p class="text-muted small">Acede à tua conta para continuar</p>
+        </div>
+
+        <form action="/login" method="POST">
+            <div class="mb-3 text-start">
+                <label for="tipo" class="form-label text-muted small">Tipo de Acesso</label>
+                <select class="form-select" id="tipo" name="tipo" required>
+                    <option value="aluno">Área do Aluno</option>
+                    <option value="admin">Administração / Gestão</option>
+                </select>
+            </div>
+
+            <div class="mb-3 text-start">
+                <label for="usuario" class="form-label text-muted small">Utilizador</label>
+                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Insere o teu utilizador" required>
+            </div>
+
+            <div class="mb-4 text-start">
+                <label for="senha" class="form-label text-muted small">Palavra-passe</label>
+                <input type="password" class="form-control" id="senha" name="senha" placeholder="Insere a tua palavra-passe" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mb-3">Entrar no Sistema</button>
+        </form>
+
+        <a href="/" class="text-muted small text-decoration-none"><i class="fa-solid fa-arrow-left me-1"></i> Voltar à página principal</a>
+    </div>
+
+</body>
+</html>

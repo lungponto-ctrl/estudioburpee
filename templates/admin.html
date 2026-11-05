@@ -13,6 +13,11 @@
         .btn-primary { background-color: #0066ff; border: none; font-weight: 600; }
         .btn-primary:hover { background-color: #0052cc; }
         .table { color: #fff; }
+
+        /* Garantir rótulos claros e visíveis nos formulários e modais */
+        .form-label, label { color: #f3f4f6 !important; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem; }
+        .text-muted { color: #9ca3af !important; }
+
         .form-control, .form-select { background-color: #0a0a0c !important; border: 1px solid #2a2a35 !important; color: #ffffff !important; }
         .form-control::placeholder { color: #9ca3af !important; opacity: 1; }
         .form-control:focus, .form-select:focus { background-color: #0a0a0c !important; border-color: #0066ff !important; color: #ffffff !important; box-shadow: 0 0 0 0.25rem rgba(0, 102, 255, 0.25); }
@@ -31,7 +36,7 @@
 
     <div class="container py-4">
 
-        <!-- Cartões de Resumo com Botão para Editar Informações do Estúdio -->
+        <!-- Cartões de Resumo -->
         <div class="row mb-4">
             <div class="col-md-4 mb-3">
                 <div class="card p-3 shadow-sm border-start border-primary border-4">
@@ -131,16 +136,16 @@
                                         <div class="modal-body text-start">
                                             <h6 class="text-primary fw-bold mb-3">Dados Cadastrais</h6>
                                             <div class="mb-3">
-                                                <label class="form-label text-muted small">Nome Completo</label>
+                                                <label class="form-label">Nome Completo</label>
                                                 <input type="text" class="form-control" name="nome" value="{{ aluno.nome }}" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label text-muted small">Telefone / WhatsApp</label>
+                                                <label class="form-label">Telefone / WhatsApp</label>
                                                 <input type="text" class="form-control" name="telefone" value="{{ aluno.telefone }}" required>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
-                                                    <label class="form-label text-muted small">Frequência</label>
+                                                    <label class="form-label">Frequência</label>
                                                     <select class="form-select" name="frequencia">
                                                         <option value="2x por semana" {% if aluno.frequencia == '2x por semana' %}selected{% endif %}>2x por semana</option>
                                                         <option value="3x por semana" {% if aluno.frequencia == '3x por semana' %}selected{% endif %}>3x por semana</option>
@@ -148,32 +153,32 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
-                                                    <label class="form-label text-muted small">Utilizador</label>
+                                                    <label class="form-label">Utilizador</label>
                                                     <input type="text" class="form-control" name="usuario" value="{{ aluno.usuario }}" required>
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label text-muted small">Senha</label>
+                                                <label class="form-label">Senha</label>
                                                 <input type="text" class="form-control" name="senha" value="{{ aluno.senha }}" required>
                                             </div>
 
                                             <h6 class="text-primary fw-bold mt-4 mb-3">Avaliação Física Atualizada</h6>
                                             <div class="row">
                                                 <div class="col-md-4 mb-3">
-                                                    <label class="form-label text-muted small">Peso</label>
+                                                    <label class="form-label">Peso</label>
                                                     <input type="text" class="form-control" name="peso" value="{{ aluno.avaliacao.peso }}">
                                                 </div>
                                                 <div class="col-md-4 mb-3">
-                                                    <label class="form-label text-muted small">Altura</label>
+                                                    <label class="form-label">Altura</label>
                                                     <input type="text" class="form-control" name="altura" value="{{ aluno.avaliacao.altura }}">
                                                 </div>
                                                 <div class="col-md-4 mb-3">
-                                                    <label class="form-label text-muted small">% Gordura</label>
+                                                    <label class="form-label">% Gordura</label>
                                                     <input type="text" class="form-control" name="gordura" value="{{ aluno.avaliacao.gordura }}">
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label text-muted small">Meta Principal</label>
+                                                <label class="form-label">Meta Principal</label>
                                                 <input type="text" class="form-control" name="meta" value="{{ aluno.avaliacao.meta }}">
                                             </div>
                                         </div>
@@ -234,15 +239,15 @@
                                     <form action="/admin/professor/editar/{{ prof.id }}" method="POST">
                                         <div class="modal-body text-start">
                                             <div class="mb-3">
-                                                <label class="form-label text-muted small">Nome Completo</label>
+                                                <label class="form-label">Nome Completo</label>
                                                 <input type="text" class="form-control" name="nome" value="{{ prof.nome }}" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label text-muted small">Telefone / WhatsApp</label>
+                                                <label class="form-label">Telefone / WhatsApp</label>
                                                 <input type="text" class="form-control" name="telefone" value="{{ prof.telefone }}" required>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label text-muted small">Especialidade</label>
+                                                <label class="form-label">Especialidade</label>
                                                 <input type="text" class="form-control" name="especialidade" value="{{ prof.especialidade }}" required>
                                             </div>
                                         </div>
@@ -274,33 +279,33 @@
                     <div class="modal-body text-start">
                         <h6 class="text-primary fw-bold mb-3">Dados Gerais</h6>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Nome do Estúdio</label>
+                            <label class="form-label">Nome do Estúdio</label>
                             <input type="text" class="form-control" name="nome" value="{{ info.nome }}" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">WhatsApp / Telefone</label>
+                            <label class="form-label">WhatsApp / Telefone</label>
                             <input type="text" class="form-control" name="telefone" value="{{ info.telefone }}" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Endereço Completo</label>
+                            <label class="form-label">Endereço Completo</label>
                             <input type="text" class="form-control" name="endereco" value="{{ info.endereco }}" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">CEP</label>
+                            <label class="form-label">CEP</label>
                             <input type="text" class="form-control" name="cep" value="{{ info.cep }}" required>
                         </div>
 
                         <h6 class="text-primary fw-bold mt-4 mb-3">Horários de Funcionamento</h6>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Segunda a Sexta</label>
+                            <label class="form-label">Segunda a Sexta</label>
                             <input type="text" class="form-control" name="horario_semana" value="{{ info.horario_semana }}" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Sábados</label>
+                            <label class="form-label">Sábados</label>
                             <input type="text" class="form-control" name="horario_sabado" value="{{ info.horario_sabado }}" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Observação de Atendimento</label>
+                            <label class="form-label">Observação de Atendimento</label>
                             <input type="text" class="form-control" name="observacao_horario" value="{{ info.observacao_horario }}" required>
                         </div>
                     </div>
@@ -326,17 +331,17 @@
                         <h6 class="text-primary fw-bold mb-3"><i class="fa-solid fa-id-card me-1"></i> Dados Cadastrais</h6>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label text-muted small">Nome Completo</label>
+                                <label class="form-label">Nome Completo</label>
                                 <input type="text" class="form-control" name="nome" required placeholder="Ex: Maria Souza">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label text-muted small">Telefone / WhatsApp</label>
+                                <label class="form-label">Telefone / WhatsApp</label>
                                 <input type="text" class="form-control" name="telefone" required placeholder="Ex: (31) 98888-9999">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label class="form-label text-muted small">Frequência Semanal</label>
+                                <label class="form-label">Frequência Semanal</label>
                                 <select class="form-select" name="frequencia">
                                     <option value="2x por semana">2x por semana</option>
                                     <option value="3x por semana" selected>3x por semana</option>
@@ -344,11 +349,11 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label text-muted small">Utilizador (Login)</label>
+                                <label class="form-label">Utilizador (Login)</label>
                                 <input type="text" class="form-control" name="usuario" required placeholder="Ex: maria">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label text-muted small">Palavra-passe</label>
+                                <label class="form-label">Palavra-passe</label>
                                 <input type="password" class="form-control" name="senha" required placeholder="Ex: 123456">
                             </div>
                         </div>
@@ -356,20 +361,20 @@
                         <h6 class="text-primary fw-bold mt-4 mb-3"><i class="fa-solid fa-heart-pulse me-1"></i> Avaliação Física Inicial</h6>
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label class="form-label text-muted small">Peso</label>
+                                <label class="form-label">Peso</label>
                                 <input type="text" class="form-control" name="peso" placeholder="Ex: 75kg">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label text-muted small">Altura</label>
+                                <label class="form-label">Altura</label>
                                 <input type="text" class="form-control" name="altura" placeholder="Ex: 1.72m">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label text-muted small">% Gordura</label>
+                                <label class="form-label">% Gordura</label>
                                 <input type="text" class="form-control" name="gordura" placeholder="Ex: 16%">
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Meta Principal</label>
+                            <label class="form-label">Meta Principal</label>
                             <input type="text" class="form-control" name="meta" placeholder="Ex: Hipertrofia e Condicionamento">
                         </div>
                     </div>
@@ -393,7 +398,7 @@
                 <form action="/admin/treino/adicionar" method="POST">
                     <div class="modal-body text-start">
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Dia da Semana</label>
+                            <label class="form-label">Dia da Semana</label>
                             <select class="form-select" name="dia" required>
                                 <option value="Segunda-feira">Segunda-feira</option>
                                 <option value="Terça-feira">Terça-feira</option>
@@ -404,15 +409,15 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Nome do Exercício</label>
+                            <label class="form-label">Nome do Exercício</label>
                             <input type="text" class="form-control" name="exercicio" required placeholder="Ex: Burpees / Agachamento">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Séries e Repetições</label>
+                            <label class="form-label">Séries e Repetições</label>
                             <input type="text" class="form-control" name="series" required placeholder="Ex: 4x15">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Descanso</label>
+                            <label class="form-label">Descanso</label>
                             <input type="text" class="form-control" name="descanso" placeholder="Ex: 45s">
                         </div>
                     </div>
@@ -436,15 +441,15 @@
                 <form action="/admin/professor/adicionar" method="POST">
                     <div class="modal-body text-start">
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Nome Completo</label>
+                            <label class="form-label">Nome Completo</label>
                             <input type="text" class="form-control" name="nome" required placeholder="Ex: Roberto Carlos">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Telefone / WhatsApp</label>
+                            <label class="form-label">Telefone / WhatsApp</label>
                             <input type="text" class="form-control" name="telefone" required placeholder="Ex: (31) 97777-8888">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Especialidade</label>
+                            <label class="form-label">Especialidade</label>
                             <input type="text" class="form-control" name="especialidade" required placeholder="Ex: Musculação / Treino Funcional">
                         </div>
                     </div>

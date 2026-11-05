@@ -25,6 +25,12 @@
             padding: 2.5rem;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
+        /* Rótulos claros e bem visíveis */
+        .form-label {
+            color: #e5e7eb !important;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
         .btn-primary {
             background-color: #0066ff;
             border: none;
@@ -63,7 +69,7 @@
 
         <form action="/login" method="POST">
             <div class="mb-3 text-start">
-                <label for="tipo" class="form-label text-muted small">Tipo de Acesso</label>
+                <label for="tipo" class="form-label">Tipo de Acesso</label>
                 <select class="form-select" id="tipo" name="tipo" required>
                     <option value="aluno">Área do Aluno</option>
                     <option value="admin">Administração / Gestão</option>
@@ -71,12 +77,12 @@
             </div>
 
             <div class="mb-3 text-start">
-                <label for="usuario" class="form-label text-muted small">Utilizador</label>
+                <label for="usuario" class="form-label">Utilizador</label>
                 <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Insere o teu utilizador" required>
             </div>
 
             <div class="mb-4 text-start">
-                <label for="senha" class="form-label text-muted small">Palavra-passe</label>
+                <label for="senha" class="form-label">Palavra-passe</label>
                 <input type="password" class="form-control" id="senha" name="senha" placeholder="Insere a tua palavra-passe" required>
             </div>
 
